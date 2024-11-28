@@ -1,11 +1,9 @@
 """Main Entry point for batch data sync"""
 import os
 from dotenv import load_dotenv
-from dune_client.client import DuneClient
 from web3 import Web3
 from src.fetch.orderbook import OrderbookFetcher, OrderbookEnv
 from src.logger import set_log
-from src.sync.config import BatchDataSyncConfig
 from src.sync.common import compute_block_and_month_range
 from src.models.block_range import BlockRange
 
@@ -16,7 +14,6 @@ log = set_log(__name__)
 async def sync_batch_data(
     node: Web3,
     orderbook: OrderbookFetcher,
-    config: BatchDataSyncConfig,
 ) -> None:
     """Batch data Sync Logic"""
     load_dotenv()

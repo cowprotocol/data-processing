@@ -7,7 +7,6 @@ from src.models.tables import SyncTable
 
 log = set_log(__name__)
 
-
 def find_block_with_timestamp(node: Web3, time_stamp: float) -> int:
     """
     This implements binary search and returns the smallest block number

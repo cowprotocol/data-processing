@@ -11,9 +11,6 @@ from web3 import Web3
 from src.fetch.orderbook import OrderbookFetcher
 from src.logger import set_log
 from src.models.tables import SyncTable
-from src.sync.config import (
-    BatchDataSyncConfig,
-)
 from src.sync.batch_data import sync_batch_data
 from src.utils import node_suffix
 
@@ -52,13 +49,10 @@ def main() -> None:
     )
 
     if args.sync_table == SyncTable.BATCH_DATA:
-        table = os.environ["BATCH_DATA_TARGET_TABLE"]
-        assert table, "BATCH DATA sync needs a BATCH_DATA_TARGET_TABLE env"
         asyncio.run(
             sync_batch_data(
                 web3,
                 orderbook,
-                config=BatchDataSyncConfig(table),
             )
         )
     else:
