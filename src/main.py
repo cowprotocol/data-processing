@@ -37,6 +37,7 @@ class ScriptArgs:
         arguments, _ = parser.parse_known_args()
         self.sync_table: SyncTable = arguments.sync_table
 
+
 def main() -> None:
     """
     Main function
@@ -49,19 +50,19 @@ def main() -> None:
     web3 = Web3(
         Web3.HTTPProvider(os.environ.get("NODE_URL" + "_" + node_suffix(network)))
     )
- 
-    # if args.sync_table == SyncTable.BATCH_DATA:
-    #     table = os.environ["BATCH_DATA_TARGET_TABLE"]
-    #     assert table, "BATCH DATA sync needs a BATCH_DATA_TARGET_TABLE env"
-    #     asyncio.run(
-    #         sync_batch_data(
-    #             web3,
-    #             orderbook,
-    #             config=BatchDataSyncConfig(table),
-    #         )
-    #     )
-    # else:
-    #     log.error(f"unsupported sync_table '{args.sync_table}'")
+
+    if args.sync_table == SyncTable.BATCH_DATA:
+        table = os.environ["BATCH_DATA_TARGET_TABLE"]
+        assert table, "BATCH DATA sync needs a BATCH_DATA_TARGET_TABLE env"
+        asyncio.run(
+            sync_batch_data(
+                web3,
+                orderbook,
+                config=BatchDataSyncConfig(table),
+            )
+        )
+    else:
+        log.error(f"unsupported sync_table '{args.sync_table}'")
 
 
 if __name__ == "__main__":
