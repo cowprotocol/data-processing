@@ -42,19 +42,12 @@ def main() -> None:
     load_dotenv()
     args = ScriptArgs()
     orderbook = OrderbookFetcher()
-    network = os.environ.get("NETWORK", "mainnet")
+    network = node_suffix(os.environ.get("NETWORK", "mainnet"))
     log.info(f"Network is set to: {network}")
-    web3 = Web3(
-        Web3.HTTPProvider(os.environ.get("NODE_URL" + "_" + node_suffix(network)))
-    )
+    web3 = Web3(Web3.HTTPProvider(os.environ.get("NODE_URL" + "_" + network)))
 
     if args.sync_table == SyncTable.BATCH_DATA:
-        asyncio.run(
-            sync_batch_data(
-                web3,
-                orderbook,
-            )
-        )
+        asyncio.run(sync_batch_data(web3, orderbook, network))
     else:
         log.error(f"unsupported sync_table '{args.sync_table}'")
 

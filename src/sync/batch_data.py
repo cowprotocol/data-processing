@@ -12,21 +12,18 @@ log = set_log(__name__)
 
 
 async def sync_batch_data(
-    node: Web3,
-    orderbook: OrderbookFetcher,
+    node: Web3, orderbook: OrderbookFetcher, network: str
 ) -> None:
     """Batch data Sync Logic"""
-    load_dotenv()
-    network = os.environ["NETWORK"]
 
     block_range_list, months_list, is_even = compute_block_and_month_range(node)
     for i, _ in enumerate(block_range_list):
         start_block = block_range_list[i][0]
         end_block = block_range_list[i][1]
         if is_even[i]:
-            table_name = "raw_batch_data_latest_even_month_" + str(network)
+            table_name = "raw_batch_data_latest_even_month_" + network.lower()
         else:
-            table_name = "raw_batch_data_latest_odd_month_" + str(network)
+            table_name = "raw_batch_data_latest_odd_month_" + network.lower()
         block_range = BlockRange(block_from=start_block, block_to=end_block)
         log.info(
             f"About to process block range ({start_block}, {end_block}) for month {months_list[i]}"
