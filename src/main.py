@@ -1,9 +1,9 @@
 """Main Entry point for app_hash sync"""
+
 import argparse
 import asyncio
 import os
 from dataclasses import dataclass
-from pathlib import Path
 
 from dotenv import load_dotenv
 from web3 import Web3
@@ -47,7 +47,9 @@ def main() -> None:
     web3 = Web3(Web3.HTTPProvider(os.environ.get("NODE_URL" + "_" + network)))
 
     if args.sync_table == SyncTable.BATCH_DATA:
-        asyncio.run(sync_batch_data(web3, orderbook, network))
+        asyncio.run(
+            sync_batch_data(web3, orderbook, network, recompute_previous_month=False)
+        )
     else:
         log.error(f"unsupported sync_table '{args.sync_table}'")
 

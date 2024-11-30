@@ -1,4 +1,5 @@
 """Shared methods between both sync scripts."""
+
 from datetime import datetime, timezone
 from typing import List, Tuple
 from web3 import Web3
@@ -6,6 +7,7 @@ from src.logger import set_log
 from src.models.tables import SyncTable
 
 log = set_log(__name__)
+
 
 def find_block_with_timestamp(node: Web3, time_stamp: float) -> int:
     """
@@ -42,7 +44,7 @@ def find_block_with_timestamp(node: Web3, time_stamp: float) -> int:
 
 
 def compute_block_and_month_range(  # pylint: disable=too-many-locals
-    node: Web3,
+    node: Web3, recompute_previous_month: bool
 ) -> Tuple[List[Tuple[int, int]], List[str], List[bool]]:
     """
     This determines the block range and the relevant months
@@ -81,7 +83,7 @@ def compute_block_and_month_range(  # pylint: disable=too-many-locals
         is_even = [False]
     months_list = [current_month]
     block_range = [(current_month_start_block, current_month_end_block)]
-    if current_month_end_datetime.day == 1:
+    if current_month_end_datetime.day == 1 or recompute_previous_month:
         is_even.append(not is_even[0])
         if current_month_end_datetime.month == 1:
             previous_month = f"{current_month_end_datetime.year - 1}_12"
